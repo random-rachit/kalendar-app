@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,9 +31,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rachitbhutani.kalendar.util.Constants
@@ -39,7 +45,7 @@ import com.rachitbhutani.kalendar.util.Constants
 @Composable
 fun AddTaskBottomSheet(
     modifier: Modifier = Modifier,
-    onDone: (title: String) -> Unit,
+    onDone: (title: String, description: String) -> Unit,
     onDismiss: () -> Unit
 ) {
     val state = rememberModalBottomSheetState()
@@ -52,23 +58,52 @@ fun AddTaskBottomSheet(
         modifier = modifier.fillMaxWidth(),
         sheetState = state
     ) {
-        var text by remember { mutableStateOf("") }
+        val focusManager = LocalFocusManager.current
+
+        var title by remember { mutableStateOf("") }
+        var description by remember { mutableStateOf("") }
         TextField(
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .padding(horizontal = 16.dp)
                 .background(Color.Transparent)
                 .fillMaxWidth(),
-            value = text,
-            onValueChange = { text = it }, placeholder = {
+            singleLine = true,
+            value = title,
+            onValueChange = { title = it }, placeholder = {
                 Text(text = "Add the task")
-            })
+            },
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }
+            )
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .background(Color.Transparent)
+                .fillMaxWidth(),
+            value = description,
+            onValueChange = { description = it },
+            placeholder = {
+                Text(text = "Add the description")
+            },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    onDone.invoke(title, description)
+                }
+            ))
         Button(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
             onClick = {
-                onDone.invoke(text)
+                onDone.invoke(title, description)
             }) {
             Text(text = "Done")
         }

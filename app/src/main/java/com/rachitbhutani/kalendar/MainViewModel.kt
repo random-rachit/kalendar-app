@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.rachitbhutani.kalendar.tasks.data.GenericStatusResponse
 import com.rachitbhutani.kalendar.tasks.data.TaskData
 import com.rachitbhutani.kalendar.tasks.data.TaskRepository
-import com.rachitbhutani.kalendar.tasks.data.TaskRepositoryImpl
 import com.rachitbhutani.kalendar.util.CalendarHandler
 import com.rachitbhutani.kalendar.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -69,8 +68,8 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun addNewTask(title: String) = viewModelScope.launch(Dispatchers.IO) {
-        taskRepository.addNewTask(title)?.let {
+    fun addNewTask(title: String, desc: String) = viewModelScope.launch(Dispatchers.IO) {
+        taskRepository.addNewTask(title, desc)?.let {
             fetchTasks()
         }
     }

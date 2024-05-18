@@ -104,8 +104,8 @@ class MainActivity : ComponentActivity() {
                     }
 
                     if (showAddTaskBS) {
-                        AddTaskBottomSheet(onDone = {
-                            viewModel.addNewTask(it)
+                        AddTaskBottomSheet(onDone = { title, desc ->
+                            viewModel.addNewTask(title, desc)
                             viewModel.showAddTaskBS(false)
                         }, onDismiss = {
                             viewModel.showAddTaskBS(false)

@@ -13,7 +13,7 @@ class TaskRepositoryImpl @Inject constructor(
     override suspend fun deleteTask(taskId: Int) =
         service.deleteTask(DeleteTaskRequest(Constants.USER_ID, taskId))
 
-    override suspend fun addNewTask(title: String) =
-        service.addNewTask(AddNewTaskRequest(Constants.USER_ID, TaskDetail(title, null)))
+    override suspend fun addNewTask(title: String, desc: String) =
+        service.addNewTask(AddNewTaskRequest(Constants.USER_ID, TaskDetail(title, desc)))
 
 }
