@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Kalendar</string>
+    <string name="your_tasks">Your Tasks</string>
+    <string name="calendar_limit_reached">Oops! Going too far.</string>
+</resources>
